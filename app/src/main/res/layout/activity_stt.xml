@@ -4,6 +4,8 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#090909"
@@ -16,7 +18,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/stt"
                 android:layout_width="431dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -45,7 +47,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/sttResult"
                     android:layout_width="match_parent"
                     android:layout_height="492dp"
                     android:gravity="center|left"
@@ -61,7 +63,7 @@
                 android:orientation="vertical">
 
                 <Button
-                    android:id="@+id/button3"
+                    android:id="@+id/sttStart"
                     android:layout_width="wrap_content"
                     android:layout_height="62dp"
                     android:layout_gravity="center"
