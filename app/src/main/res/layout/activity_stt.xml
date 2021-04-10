@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#090909"
@@ -22,7 +23,7 @@
                 android:layout_width="431dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="음성인식"
+                android:text="주문"
                 android:textColor="#050505"
                 android:textSize="30sp"
                 android:textStyle="bold" />
@@ -43,13 +44,13 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="517dp"
+                android:layout_height="428dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/sttResult"
                     android:layout_width="match_parent"
-                    android:layout_height="492dp"
+                    android:layout_height="438dp"
                     android:gravity="center|left"
                     android:text="음성인식 내용"
                     android:textColor="#050505"
@@ -59,18 +60,18 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="93dp"
                 android:orientation="vertical">
 
                 <Button
                     android:id="@+id/sttStart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="62dp"
+                    android:layout_width="176dp"
+                    android:layout_height="97dp"
                     android:layout_gravity="center"
                     android:background="@color/colorPrimary"
-                    android:text="음성인식 시작"
+                    android:text="주문 시작"
                     android:textColor="#FDD835"
-                    android:textSize="24sp"
+                    android:textSize="26sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
