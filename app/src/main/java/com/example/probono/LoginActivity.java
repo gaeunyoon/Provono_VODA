@@ -1,103 +1,97 @@
 package com.example.probono;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GoogleAuthProvider;
 
-import com.bumptech.glide.Glide;
-import com.kakao.sdk.auth.model.OAuthToken;
-import com.kakao.sdk.common.KakaoSdk;
-import com.kakao.sdk.common.util.Utility;
-import com.kakao.sdk.user.UserApi;
-import com.kakao.sdk.user.UserApiClient;
-import com.kakao.sdk.user.model.User;
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
 
-import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
-import kotlin.jvm.functions.Function2;
+    private SignInButton btn_google;
+    private FirebaseAuth auth;
+    private GoogleApiClient googleApiClient;
+    private static final int REQ_SIGN_GOOGLE = 100;
 
-public class LoginActivity extends AppCompatActivity {
-    private static final String TAG="LoginActivity";
-    private View loginButton,logoutButton;
-    private TextView nickname;
-    private ImageView profile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        loginButton=findViewById(R.id.kakaologin);
-       // logoutButton=findViewById(R.id.kakaologout);
-       // nickname=findViewById(R.id.nickname);
-       // profile=findViewById(R.id.profile);
-        String keyHash = Utility.INSTANCE.getKeyHash(this);
-        Log.i(TAG, "onCreate: keyHash:" + keyHash);
-        Function2<OAuthToken, Throwable, Unit> callback=new Function2<OAuthToken, Throwable, Unit>() {
-            @Override
-            public Unit invoke(OAuthToken oAuthToken, Throwable throwable) {
-                if(oAuthToken!=null){
-//
-                }
-                if(throwable!=null){
-//
-                }
-                updateKakao();
-                return null;
-            }
-        };
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(LoginActivity.this)) {
-                    UserApiClient.getInstance().loginWithKakaoTalk(LoginActivity.this, callback);
-                }
-                else{
-                    UserApiClient.getInstance().loginWithKakaoAccount(LoginActivity.this,callback);
-                }
-            }
-        });
 
-        logoutButton.setOnClickListener(new View.OnClickListener() {
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
+                .build();
+
+        auth = FirebaseAuth.getInstance();
+
+        btn_google = findViewById(R.id.btn_google);
+        btn_google.setOnClickListener(new View.OnClickListener() {//구글로그인버튼클릭시,이곳수행
             @Override
-            public void onClick(View view) {
-                UserApiClient.getInstance().logout(new Function1<Throwable, Unit>() {
-                    @Override
-                    public Unit invoke(Throwable throwable) {
-                        updateKakao();
-                        return null;
-                    }
-                });
+            public void onClick(View v) {
+                Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+                startActivityForResult(intent, REQ_SIGN_GOOGLE);
             }
         });
-        updateKakao();
     }
 
-    private void updateKakao(){
-        UserApiClient.getInstance().me(new Function2<User, Throwable, Unit>() {
-            @Override
-            public Unit invoke(User user, Throwable throwable) {
-                if (user!=null){
-                    Log.i(TAG,"invoke: id"+user.getId());
-                    Log.i(TAG,"invoke: nickname"+user.getKakaoAccount().getProfile().getNickname());
-                    Log.i(TAG,"invoke: E-mail"+user.getKakaoAccount().getEmail());
-                    Log.i(TAG,"invoke: gender"+user.getKakaoAccount().getGender());
-                    Log.i(TAG,"invoke: age"+user.getKakaoAccount().getAgeRange());
-                    nickname.setText(user.getKakaoAccount().getProfile().getNickname());
-                    Glide.with(profile).load(user.getKakaoAccount().getProfile().getThumbnailImageUrl()).circleCrop().into(profile);
-                    loginButton.setVisibility(View.GONE);
-                    logoutButton.setVisibility(View.VISIBLE);
-                }
-                else{
-                    nickname.setText(null);
-                    profile.setImageBitmap(null);
-                    loginButton.setVisibility(View.VISIBLE);
-                    logoutButton.setVisibility(View.GONE);
-                }
-                return null;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQ_SIGN_GOOGLE) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()) {
+                GoogleSignInAccount account = result.getSignInAccount();//account에 닉네임등구글로그인 정보 담겨있음
+                resultLogin(account);
             }
-        });
+        }
+    }
+
+    private void resultLogin(GoogleSignInAccount account) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        auth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
+                            intent.putExtra("nickName", account.getDisplayName());
+                            intent.putExtra("photoUrl", String.valueOf(account.getPhotoUrl()));
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }

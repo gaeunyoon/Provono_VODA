@@ -12,10 +12,7 @@
         android:label="VODA"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:name=".KakaoApplication"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".MainActivity"/>
-        <activity android:name=".SttActivity"/>
         <activity android:name=".Splashscreen"
             android:label="Probono">
             <intent-filter>
@@ -25,16 +22,14 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity">
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <!-- Redirect URI: "kakao{NATIVE_APP_KEY}://oauth“ -->
-                <data android:host="oauth"
-                    android:scheme="kakao7973b58ff7dda235011235c1a6721ff3" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".MainActivity"/>
+        <activity android:name=".SttActivity"/>
     </application>
 </manifest>
