@@ -37,7 +37,7 @@
 
         <LinearLayout
             android:layout_width="378dp"
-            android:layout_height="589dp"
+            android:layout_height="562dp"
             android:layout_gravity="center"
             android:background="#FDFCFC"
             android:orientation="vertical">

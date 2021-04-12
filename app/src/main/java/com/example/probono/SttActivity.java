@@ -25,7 +25,7 @@ import java.util.Locale;
 public class SttActivity extends AppCompatActivity implements TextToSpeech.OnInitListener
 {
 
-    Button sttStart;
+    Button sttBtn;
     TextView textView;
     public static Context mContext;
     private Object TextView;
@@ -35,15 +35,13 @@ public class SttActivity extends AppCompatActivity implements TextToSpeech.OnIni
     SpeechRecognizer mRecognizer;
     TextToSpeech tts;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stt);
         mContext = this;
         textView = (TextView) findViewById(R.id.sttResult);
-        Button sttBtn = (Button) findViewById(R.id.sttStart);
+        sttBtn = (Button) findViewById(R.id.sttStart);
 
         // 퍼미션 체크
         if (Build.VERSION.SDK_INT >= 23) {
@@ -168,10 +166,6 @@ public class SttActivity extends AppCompatActivity implements TextToSpeech.OnIni
                 textView.append("메뉴 혹은 가게이름을 말씀해주세요.\n");
                 tts.speak("메뉴 혹은 가게이름을 말씀해주세요.", TextToSpeech.QUEUE_FLUSH, null);
             }
-            else if (input.equals("아니")) {
-                textView.append("메인화면으로 돌아가겠습니다.\n");
-                tts.speak("메인화면으로 돌아가겠습니다.", TextToSpeech.QUEUE_FLUSH, null);
-            }
             else{
                 textView.append("죄송합니다. 다시 말씀해주시겠어요?");
                 tts.speak("죄송합니다. 다시 말씀해주시겠어요?",TextToSpeech.QUEUE_FLUSH,null);
@@ -199,7 +193,34 @@ public class SttActivity extends AppCompatActivity implements TextToSpeech.OnIni
                 funcVoiceOut(guideStr);
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
-
+            }
+            else if (resultStr.indexOf("떡볶이") > -1) {
+                String guideStr = "떡볶이 가게 목록 알려드리겠습니다.";
+                Toast.makeText(getApplicationContext(), guideStr, Toast.LENGTH_SHORT).show();
+                funcVoiceOut(guideStr);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+            else if (resultStr.indexOf("한식") > -1) {
+                String guideStr = "한식 가게 목록 알려드리겠습니다.";
+                Toast.makeText(getApplicationContext(), guideStr, Toast.LENGTH_SHORT).show();
+                funcVoiceOut(guideStr);
+                Intent intent = new Intent(getApplicationContext(), KoreanActivity.class);
+                startActivity(intent);
+            }
+            else if (resultStr.indexOf("치킨") > -1) {
+                String guideStr = "치킨 가게 목록 알려드리겠습니다.";
+                Toast.makeText(getApplicationContext(), guideStr, Toast.LENGTH_SHORT).show();
+                funcVoiceOut(guideStr);
+                Intent intent = new Intent(getApplicationContext(), ChickenActivity.class);
+                startActivity(intent);
+            }
+            else if (resultStr.indexOf("커피") > -1) {
+                String guideStr = "카페 목록 알려드리겠습니다.";
+                Toast.makeText(getApplicationContext(), guideStr, Toast.LENGTH_SHORT).show();
+                funcVoiceOut(guideStr);
+                Intent intent = new Intent(getApplicationContext(), DessertActivity.class);
+                startActivity(intent);
             }
         }
 
