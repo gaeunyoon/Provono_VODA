@@ -9,11 +9,16 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="VODA"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="Provono"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".Splashscreen">
+
+        <activity android:name=".KoreanActivity"></activity>
+        <activity android:name=".ChickenActivity"/>
+        <activity android:name=".TtoActivity"/>
+        <activity android:name=".DessertActivity"/>
+        <activity android:name=".Splashscreen"
+            android:label="VODA">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -26,11 +31,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".SttActivity"></activity>
 
-        <activity android:name=".SttActivity"/>
-        <activity android:name=".KoreanActivity"/>
-        <activity android:name=".ChickenActivity"/>
-        <activity android:name=".TtoActivity"/>
-        <activity android:name=".DessertActivity"/>
     </application>
 </manifest>

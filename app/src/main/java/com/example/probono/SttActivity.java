@@ -28,7 +28,6 @@ public class SttActivity extends AppCompatActivity implements TextToSpeech.OnIni
     Button sttBtn;
     TextView textView;
     public static Context mContext;
-    private Object TextView;
     final int PERMISSION = 1;
 
     Intent sttIntent;
@@ -54,12 +53,14 @@ public class SttActivity extends AppCompatActivity implements TextToSpeech.OnIni
         speechInit();
         //Button Click Event 설정
         sttBtn.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v){
                 speechStart();
             }
         });
     }
+
 
     private void speechInit() {
 
@@ -71,11 +72,13 @@ public class SttActivity extends AppCompatActivity implements TextToSpeech.OnIni
         // tts 객체 생성, 초기화
         tts = new TextToSpeech(SttActivity.this, this); }
 
+
         public void speechStart() {
         tts.speak("주문하시겠습니까?",TextToSpeech.QUEUE_FLUSH,null);
         mRecognizer = SpeechRecognizer.createSpeechRecognizer(mContext); // 음성인식 객체
         mRecognizer.setRecognitionListener(listener); // 음성인식 리스너 등록
-        mRecognizer.startListening(sttIntent); }
+        mRecognizer.startListening(sttIntent);
+        }
 
 
         private RecognitionListener listener = new RecognitionListener() {
@@ -129,6 +132,7 @@ public class SttActivity extends AppCompatActivity implements TextToSpeech.OnIni
             {
                 ArrayList<String> matches =
                  results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+
                 String resultStr = "";
                 for (int i = 0; i < matches.size(); i++) {
                 BreakIterator txtInMsg = null;
@@ -198,7 +202,7 @@ public class SttActivity extends AppCompatActivity implements TextToSpeech.OnIni
                 String guideStr = "떡볶이 가게 목록 알려드리겠습니다.";
                 Toast.makeText(getApplicationContext(), guideStr, Toast.LENGTH_SHORT).show();
                 funcVoiceOut(guideStr);
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), TtoActivity.class);
                 startActivity(intent);
             }
             else if (resultStr.indexOf("한식") > -1) {
@@ -232,11 +236,20 @@ public class SttActivity extends AppCompatActivity implements TextToSpeech.OnIni
             }
         }
 
-        @Override
-        public void onInit(int status){
-            if (status == TextToSpeech.SUCCESS) { tts.setLanguage(Locale.KOREAN);
-                tts.setPitch(1); } else { Log.e("TTS", "초기화 실패"); } }
+    @Override public void onInit(int status) {
+        if (status == TextToSpeech.SUCCESS) {
+            int result = tts.setLanguage(Locale.KOREA);
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.e("TTS", "This Language is not supported");
+            } else {
+                sttBtn.setEnabled(true);
 
+            }
+        } else {
+            Log.e("TTS", "Initilization Failed!");
+        }
+
+    }
         @Override
         protected void onDestroy() {
             if (tts != null) { tts.stop();tts.shutdown(); }

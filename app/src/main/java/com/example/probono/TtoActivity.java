@@ -24,6 +24,8 @@ public class TtoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(TtoActivity.this, KoreanActivity.class);
                 TtoActivity.this.startActivity(intent);
+                koreanButton.setBackgroundColor(getResources().getColor(R.color.white));
+                koreanButton.setTextColor(getResources().getColor(R.color.black));
             }
         });
         chickenButton.setOnClickListener(new View.OnClickListener() {
@@ -31,6 +33,8 @@ public class TtoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(TtoActivity.this, ChickenActivity.class);
                 TtoActivity.this.startActivity(intent);
+                chickenButton.setBackgroundColor(getResources().getColor(R.color.white));
+                chickenButton.setTextColor(getResources().getColor(R.color.black));
             }
         });
         ttoButton.setOnClickListener(new View.OnClickListener() {
@@ -38,6 +42,8 @@ public class TtoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(TtoActivity.this, TtoActivity.class);
                 TtoActivity.this.startActivity(intent);
+                ttoButton.setBackgroundColor(getResources().getColor(R.color.white));
+                ttoButton.setTextColor(getResources().getColor(R.color.black));
             }
         });
         dessertButton.setOnClickListener(new View.OnClickListener() {
@@ -45,6 +51,8 @@ public class TtoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(TtoActivity.this, DessertActivity.class);
                 TtoActivity.this.startActivity(intent);
+                dessertButton.setBackgroundColor(getResources().getColor(R.color.white));
+                dessertButton.setTextColor(getResources().getColor(R.color.black));
             }
         });
     }
