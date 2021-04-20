@@ -21,7 +21,7 @@
 
             <TextView
                 android:id="@+id/store"
-                android:layout_width="431dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="주문"
@@ -32,13 +32,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="18dp"
+            android:layout_height="30dp"
             android:background="#000000"
             android:orientation="vertical"></LinearLayout>
 
         <LinearLayout
             android:layout_width="378dp"
-            android:layout_height="562dp"
+            android:layout_height="545dp"
             android:layout_gravity="center"
             android:background="#FDFCFC"
             android:orientation="vertical">
@@ -51,9 +51,9 @@
                 <TextView
                     android:id="@+id/sttResult"
                     android:layout_width="match_parent"
-                    android:layout_height="438dp"
+                    android:layout_height="400dp"
                     android:gravity="center|left"
-                    android:text="음성인식 내용"
+                    android:text=""
                     android:textColor="#050505"
                     android:textSize="20sp"
                     android:textStyle="bold" />

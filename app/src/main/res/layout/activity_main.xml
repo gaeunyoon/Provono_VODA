@@ -18,7 +18,7 @@
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="@color/colorPrimary"
             android:drawableEnd="@drawable/ic_baseline_add_location_24"
@@ -31,7 +31,7 @@
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="132dp"
+            android:layout_height="194dp"
             android:layout_gravity="center"
             android:layout_margin="20dp"
             android:src="@drawable/voda3" />
@@ -52,6 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="20dp"
             android:background="@color/black"
             app:srcCompat="@drawable/order" />
 

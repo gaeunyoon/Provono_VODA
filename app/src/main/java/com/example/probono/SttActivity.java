@@ -3,6 +3,7 @@ package com.example.probono;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
@@ -16,227 +17,232 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.Locale;
 
 
-public class SttActivity extends AppCompatActivity implements TextToSpeech.OnInitListener
-{
+public class SttActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
 
+    final int PERMISSION = 1;
+    Context cThis;
+    String LogTT = "[STT]";
+
+    //음성인식용
+    Intent SttIntent;
+    SpeechRecognizer mRecognizer;
+
+    //음성출력용
+    TextToSpeech tts;
+
+    //화면처리용
     Button sttBtn;
     TextView textView;
-    public static Context mContext;
-    final int PERMISSION = 1;
-
-    Intent sttIntent;
-    SpeechRecognizer mRecognizer;
-    TextToSpeech tts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        cThis = this;
+
         setContentView(R.layout.activity_stt);
-        mContext = this;
-        textView = (TextView) findViewById(R.id.sttResult);
-        sttBtn = (Button) findViewById(R.id.sttStart);
 
-        // 퍼미션 체크
-        if (Build.VERSION.SDK_INT >= 23) {
-            ActivityCompat.requestPermissions(this, new
-                    String[]{Manifest.permission.INTERNET,
-                    Manifest.permission.RECORD_AUDIO}, PERMISSION);
-        }
+        SttIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        SttIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
+        SttIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");
+        mRecognizer = SpeechRecognizer.createSpeechRecognizer(cThis);
+        mRecognizer.setRecognitionListener(listener);
 
-        // STT, TTS 로드
-        speechInit();
-        //Button Click Event 설정
-        sttBtn.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v){
-                speechStart();
+        //음성출력 생성, 리스너 초기화
+        tts = new TextToSpeech(cThis, (status -> {
+            if (status != TextToSpeech.ERROR) {
+                tts.setLanguage(Locale.KOREAN);
             }
-        });
-    }
 
+            //Button Click Event 설정
+            sttBtn = (Button) findViewById(R.id.sttStart);
+            textView = (TextView) findViewById(R.id.sttResult);
+            sttBtn.setOnClickListener(new View.OnClickListener() {
 
-    private void speechInit() {
+                @Override
+                public void onClick(View v) {
+                    System.out.println("음성인식 시작");
+                    if (ContextCompat.checkSelfPermission(cThis, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(SttActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
 
-        // stt 객체 생성, 초기화
-        sttIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        sttIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
-        sttIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,"ko-KR");
+                    } else {
+                        try {
+                            mRecognizer.startListening(SttIntent);
+                        } catch (SecurityException e) {
+                            e.printStackTrace();
+                        }
+                    }
 
-        // tts 객체 생성, 초기화
-        tts = new TextToSpeech(SttActivity.this, this); }
-
-
-        public void speechStart() {
-        tts.speak("주문하시겠습니까?",TextToSpeech.QUEUE_FLUSH,null);
-        mRecognizer = SpeechRecognizer.createSpeechRecognizer(mContext); // 음성인식 객체
-        mRecognizer.setRecognitionListener(listener); // 음성인식 리스너 등록
-        mRecognizer.startListening(sttIntent);
+                    FuncVoiceOut("주문하시겠습니까?");
+                }
+            });
+             }));
         }
 
 
-        private RecognitionListener listener = new RecognitionListener() {
-            @Override public void onReadyForSpeech(Bundle params) {
-                Toast.makeText(getApplicationContext(), "음성인식을 시작합니다.", Toast.LENGTH_SHORT).show(); }
-            @Override public void onBeginningOfSpeech() { }
-            @Override public void onRmsChanged(float rmsdB) { }
-            @Override public void onBufferReceived(byte[] buffer) { }
-            @Override public void onEndOfSpeech() { }
-            @Override public void onError(int error) {
-                String message; switch (error) {
-                    case SpeechRecognizer.ERROR_AUDIO:
-                        message = "오디오 에러";
-                        break;
-                        case SpeechRecognizer.ERROR_CLIENT:
-                        message = "클라이언트 에러";
-                        break;
-                        case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
-                        message = "퍼미션 없음";
-                        break;
-                        case SpeechRecognizer.ERROR_NETWORK:
-                        message = "네트워크 에러";
-                        break;
-                        case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
-                        message = "네트웍 타임아웃";
-                        break;
-                        case SpeechRecognizer.ERROR_NO_MATCH:
-                        message = "찾을 수 없음";
-                        break;
-                        case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
-                        message = "RECOGNIZER가 바쁨";
-                        break;
-                        case SpeechRecognizer.ERROR_SERVER:
-                        message = "서버가 이상함";
-                        break;
-                        case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
-                        message = "말하는 시간초과";
-                        break;
-                        default: message = "알 수 없는 오류임";
-                        break;
-                } String guideStr = "에러가 발생하였습니다.";
 
+    private RecognitionListener listener = new RecognitionListener() {
+        @Override
+        public void onReadyForSpeech(Bundle params) {
+            Toast.makeText(getApplicationContext(), "음성인식을 시작합니다.", Toast.LENGTH_SHORT).show();
+        }
 
-                Toast.makeText(getApplicationContext(), guideStr + message, Toast.LENGTH_SHORT).show();
-                funcVoiceOut(guideStr); }
+        @Override
+        public void onBeginningOfSpeech() {
+        }
 
-            private void funcVoiceOut(String guideStr) {
+        @Override
+        public void onRmsChanged(float rmsdB) {
+        }
+
+        @Override
+        public void onBufferReceived(byte[] buffer) {
+        }
+
+        @Override
+        public void onEndOfSpeech() {
+        }
+
+        @Override
+        public void onError(int error) {
+            String message;
+            switch (error) {
+                case SpeechRecognizer.ERROR_AUDIO:
+                    message = "오디오 에러";
+                    break;
+                case SpeechRecognizer.ERROR_CLIENT:
+                    message = "클라이언트 에러";
+                    break;
+                case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
+                    message = "퍼미션 없음";
+                    break;
+                case SpeechRecognizer.ERROR_NETWORK:
+                    message = "네트워크 에러";
+                    break;
+                case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
+                    message = "네트웍 타임아웃";
+                    break;
+                case SpeechRecognizer.ERROR_NO_MATCH:
+                    message = "찾을 수 없음";
+                    break;
+                case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
+                    message = "RECOGNIZER가 바쁨";
+                    break;
+                case SpeechRecognizer.ERROR_SERVER:
+                    message = "서버가 이상함";
+                    break;
+                case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
+                    message = "말하는 시간초과";
+                    break;
+                default:
+                    message = "알 수 없는 오류임";
+                    break;
             }
+            String guideStr = "에러가 발생하였습니다.";
 
-            @Override public void onResults(Bundle results)
-            {
-                ArrayList<String> matches =
-                 results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
 
-                String resultStr = "";
-                for (int i = 0; i < matches.size(); i++) {
-                BreakIterator txtInMsg = null;
-                txtInMsg.setText(matches.get(i));
-                resultStr += matches.get(i); }
+            Toast.makeText(getApplicationContext(), guideStr + message, Toast.LENGTH_SHORT).show();
+            FuncVoiceOut(guideStr);
+        }
 
-                if(resultStr.length() < 1) return;
-                resultStr = resultStr.replace(" ", "");
-                moveActivity(resultStr);
-            }
 
-            @Override
-            public void onPartialResults(Bundle partialResults) {
+        @Override
+        public void onResults(Bundle results) {
+            String key = "";
+            key = SpeechRecognizer.RESULTS_RECOGNITION;
+            ArrayList<String> mResult = results.getStringArrayList(key);
+            String[] rs = new String[mResult.size()];
+            mResult.toArray(rs);
 
-            }
+            Log.i(LogTT, "입력값 : " + rs[0]);
+            textView.setText(rs[0] + "\r\n" + textView.getText());
+            FuncVoiceOrderCheck(rs[0]);
 
-            @Override
-            public void onEvent(int eventType, Bundle params) {
+        }
 
-            }
+        @Override
+        public void onPartialResults(Bundle partialResults) {
+
+        }
+
+        @Override
+        public void onEvent(int eventType, Bundle params) {
+
+        }
     };
 
-    private void replyAnswer(String input, TextView textView){
 
-        try {
-            if (input.equals("네")) {
-                textView.append("메뉴 혹은 가게이름을 말씀해주세요.\n");
-                tts.speak("메뉴 혹은 가게이름을 말씀해주세요.", TextToSpeech.QUEUE_FLUSH, null);
-            }
-            else if (input.equals("응")) {
-                textView.append("메뉴 혹은 가게이름을 말씀해주세요.\n");
-                tts.speak("메뉴 혹은 가게이름을 말씀해주세요.", TextToSpeech.QUEUE_FLUSH, null);
-            }
-            else if (input.equals("어")) {
-                textView.append("메뉴 혹은 가게이름을 말씀해주세요.\n");
-                tts.speak("메뉴 혹은 가게이름을 말씀해주세요.", TextToSpeech.QUEUE_FLUSH, null);
-            }
-            else{
-                textView.append("죄송합니다. 다시 말씀해주시겠어요?");
-                tts.speak("죄송합니다. 다시 말씀해주시겠어요?",TextToSpeech.QUEUE_FLUSH,null);
-            }
-        } catch(Exception e){
-            toast(e.toString());
+    private void FuncVoiceOrderCheck(String VoiceMsg) {
+
+        if (VoiceMsg.length() < 1) return;
+        VoiceMsg = VoiceMsg.replace(" ", "");
+
+
+        if (VoiceMsg.indexOf("네") > -1 || VoiceMsg.indexOf("어") > -1) {
+            FuncVoiceOut("메뉴 혹은 가게이름을 말씀해주세요.");
+            textView.setText("메뉴 혹은 가게이름을 말씀해주세요.\n");
         }
 
+        else if (VoiceMsg.indexOf("주문내역") > -1) {
+            FuncVoiceOut("주문내역으로 넘어갑니다.");
+            textView.setText("주문내역으로 넘어갑니다.\n");
+            Intent intent = new Intent(getApplicationContext(), OrderlistActivity.class);
+            startActivity(intent);
+        }else{
+        tts.speak("죄송합니다. 다시 말씀해주시겠어요?", TextToSpeech.QUEUE_FLUSH, null);
     }
 
-    private void toast(String toString) {
+}
+
+
+    public void moveActivity(String textView) {
+        if (textView.indexOf("주문내역") > -1) {
+            String guideStr = "주문내역으로 넘어갑니다.";
+            Toast.makeText(getApplicationContext(), guideStr, Toast.LENGTH_SHORT).show();
+            FuncVoiceOut(guideStr);
+            Intent intent = new Intent(getApplicationContext(), OrderlistActivity.class);
+            startActivity(intent);
+        } else if (textView.indexOf("아니") > -1) {
+            String guideStr = "메인화면으로 돌아가겠습니다.";
+            Toast.makeText(getApplicationContext(), guideStr, Toast.LENGTH_SHORT).show();
+            FuncVoiceOut(guideStr);
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+        }
     }
 
-    public void moveActivity(String resultStr) {
-            if(resultStr.indexOf("주문내역") > -1) {
-                String guideStr = "주문내역으로 넘어갑니다.";
-                Toast.makeText(getApplicationContext(), guideStr, Toast.LENGTH_SHORT).show();
-                funcVoiceOut(guideStr);
-                Intent intent = new Intent(getApplicationContext(), OrderlistActivity.class);
-                startActivity(intent);
-            }
-            else if (resultStr.indexOf("아니") > -1) {
-                String guideStr = "메인화면으로 돌아가겠습니다.";
-                Toast.makeText(getApplicationContext(), guideStr, Toast.LENGTH_SHORT).show();
-                funcVoiceOut(guideStr);
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-            }
-            else if (resultStr.indexOf("떡볶이") > -1) {
-                String guideStr = "떡볶이 가게 목록 알려드리겠습니다.";
-                Toast.makeText(getApplicationContext(), guideStr, Toast.LENGTH_SHORT).show();
-                funcVoiceOut(guideStr);
-                Intent intent = new Intent(getApplicationContext(), TtoActivity.class);
-                startActivity(intent);
-            }
-            else if (resultStr.indexOf("한식") > -1) {
-                String guideStr = "한식 가게 목록 알려드리겠습니다.";
-                Toast.makeText(getApplicationContext(), guideStr, Toast.LENGTH_SHORT).show();
-                funcVoiceOut(guideStr);
-                Intent intent = new Intent(getApplicationContext(), KoreanActivity.class);
-                startActivity(intent);
-            }
-            else if (resultStr.indexOf("치킨") > -1) {
-                String guideStr = "치킨 가게 목록 알려드리겠습니다.";
-                Toast.makeText(getApplicationContext(), guideStr, Toast.LENGTH_SHORT).show();
-                funcVoiceOut(guideStr);
-                Intent intent = new Intent(getApplicationContext(), ChickenActivity.class);
-                startActivity(intent);
-            }
-            else if (resultStr.indexOf("커피") > -1) {
-                String guideStr = "카페 목록 알려드리겠습니다.";
-                Toast.makeText(getApplicationContext(), guideStr, Toast.LENGTH_SHORT).show();
-                funcVoiceOut(guideStr);
-                Intent intent = new Intent(getApplicationContext(), DessertActivity.class);
-                startActivity(intent);
-            }
+
+    public void FuncVoiceOut(String OutMsg) {
+        if (OutMsg.length() < 1) return;
+        if (!tts.isSpeaking()) {
+            tts.speak(OutMsg, TextToSpeech.QUEUE_FLUSH, null);
         }
+    }
 
 
-        public void funcVoiceOut(String OutMsg){
-            if(OutMsg.length()<1)return;
-            if(!tts.isSpeaking()) {
-                tts.speak(OutMsg, TextToSpeech.QUEUE_FLUSH, null);
-            }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+            tts = null;
         }
+        if (mRecognizer != null) {
+            mRecognizer.destroy();
+            mRecognizer.cancel();
+            mRecognizer = null;
+        }
+    }
 
-    @Override public void onInit(int status) {
+    @Override
+    public void onInit(int status) {
         if (status == TextToSpeech.SUCCESS) {
             int result = tts.setLanguage(Locale.KOREA);
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
@@ -248,17 +254,5 @@ public class SttActivity extends AppCompatActivity implements TextToSpeech.OnIni
         } else {
             Log.e("TTS", "Initilization Failed!");
         }
-
     }
-        @Override
-        protected void onDestroy() {
-            if (tts != null) { tts.stop();tts.shutdown(); }
-            if(mRecognizer!=null){ mRecognizer.destroy();
-                mRecognizer.cancel();
-                mRecognizer=null; }
-            super.onDestroy();
-        }
-
 }
-
-
