@@ -68,6 +68,7 @@ public class SttActivity extends AppCompatActivity implements TextToSpeech.OnIni
                 @Override
                 public void onClick(View v) {
                     System.out.println("음성인식 시작");
+                    FuncVoiceOut("주문하시겠습니까?");
                     if (ContextCompat.checkSelfPermission(cThis, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(SttActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
 
@@ -79,7 +80,7 @@ public class SttActivity extends AppCompatActivity implements TextToSpeech.OnIni
                         }
                     }
 
-                    FuncVoiceOut("주문하시겠습니까?");
+
                 }
             });
              }));
@@ -194,6 +195,12 @@ public class SttActivity extends AppCompatActivity implements TextToSpeech.OnIni
             textView.setText("주문내역으로 넘어갑니다.\n");
             Intent intent = new Intent(getApplicationContext(), OrderlistActivity.class);
             startActivity(intent);
+        }
+        else if (VoiceMsg.indexOf("아니") > -1) {
+            FuncVoiceOut("메인화면으로 돌아가겠습니다.");
+            textView.setText("메인화면으로 돌아가겠습니다.\n");
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
         }else{
         tts.speak("죄송합니다. 다시 말씀해주시겠어요?", TextToSpeech.QUEUE_FLUSH, null);
     }
@@ -218,12 +225,14 @@ public class SttActivity extends AppCompatActivity implements TextToSpeech.OnIni
     }
 
 
-    public void FuncVoiceOut(String OutMsg) {
+    private void FuncVoiceOut(String OutMsg) {
         if (OutMsg.length() < 1) return;
-        if (!tts.isSpeaking()) {
-            tts.speak(OutMsg, TextToSpeech.QUEUE_FLUSH, null);
+
+        tts.setPitch(1.5f);
+        tts.setSpeechRate(1.0f);
+        tts.speak(OutMsg, TextToSpeech.QUEUE_FLUSH, null);
         }
-    }
+
 
 
     @Override
