@@ -234,6 +234,9 @@ public class SttActivity extends AppCompatActivity implements TextToSpeech.OnIni
             startActivity(intent);
         }else{
         tts.speak("죄송합니다. 다시 말씀해주시겠어요?", TextToSpeech.QUEUE_FLUSH, null);
+            mRecognizer=SpeechRecognizer.createSpeechRecognizer(this);
+            mRecognizer.setRecognitionListener(listener);
+            mRecognizer.startListening(SttIntent);
     }
 
 }
