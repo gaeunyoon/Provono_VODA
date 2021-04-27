@@ -188,6 +188,37 @@ public class SttActivity extends AppCompatActivity implements TextToSpeech.OnIni
         if (VoiceMsg.indexOf("네") > -1 || VoiceMsg.indexOf("어") > -1) {
             FuncVoiceOut("메뉴 혹은 가게이름을 말씀해주세요.");
             textView.setText("메뉴 혹은 가게이름을 말씀해주세요.\n");
+            mRecognizer=SpeechRecognizer.createSpeechRecognizer(this);
+            mRecognizer.setRecognitionListener(listener);
+            mRecognizer.startListening(SttIntent);
+        }
+
+        else if (VoiceMsg.indexOf("한식") > -1 ) {
+            FuncVoiceOut("한식으로 넘어갑니다.");
+            textView.setText("한식으로 넘어갑니다.\n");
+            Intent intent = new Intent(getApplicationContext(), KoreanActivity.class);
+            startActivity(intent);
+        }
+
+        else if (VoiceMsg.indexOf("분식") > -1) {
+            FuncVoiceOut("분식으로 넘어갑니다.");
+            textView.setText("분식으로 넘어갑니다.\n");
+            Intent intent = new Intent(getApplicationContext(), TtoActivity.class);
+            startActivity(intent);
+        }
+
+        else if (VoiceMsg.indexOf("치킨") > -1) {
+            FuncVoiceOut("치킨으로 넘어갑니다.");
+            textView.setText("치킨으로 넘어갑니다.\n");
+            Intent intent = new Intent(getApplicationContext(), ChickenActivity.class);
+            startActivity(intent);
+        }
+
+        else if (VoiceMsg.indexOf("디저트") > -1) {
+            FuncVoiceOut("디저트로 넘어갑니다.");
+            textView.setText("디저트로 넘어갑니다.\n");
+            Intent intent = new Intent(getApplicationContext(), DessertActivity.class);
+            startActivity(intent);
         }
 
         else if (VoiceMsg.indexOf("주문내역") > -1) {
