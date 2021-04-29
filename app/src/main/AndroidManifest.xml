@@ -17,6 +17,12 @@
         <activity android:name=".ChickenActivity"/>
         <activity android:name=".TtoActivity"/>
         <activity android:name=".DessertActivity"/>
+
+        <activity android:name=".Korean1_Activity"/>
+        <activity android:name=".Chicken1_Activity"/>
+        <activity android:name=".Dessert1_Activity"/>
+        <activity android:name=".Tto1_Activity"/>
+
         <activity android:name=".Splashscreen"
             android:label="VODA">
             <intent-filter>
