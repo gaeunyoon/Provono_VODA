@@ -185,36 +185,62 @@ public class Korean1_Activity extends AppCompatActivity implements TextToSpeech.
 
 
         if (VoiceMsg.indexOf("김치찌개") > -1) {
-            FuncVoiceOut("더 추가하실 메뉴가 있다면 네 없다며 다음이라고 말씀해주세요");
-            textView.setText("더 추가하실 메뉴가 있다면 네 없다며 다음이라고 말씀해주세요\n");
+            FuncVoiceOut("더 추가하실 메뉴가 있다면 네 없다며 다음이라고 말씀해 주세요.");
+            textView.setText("더 추가하실 메뉴가 있다면 네 없다며 다음이라고 말씀해주세요.\n");
             mRecognizer=SpeechRecognizer.createSpeechRecognizer(this);
             mRecognizer.setRecognitionListener(listener);
             mRecognizer.startListening(SttIntent);
         }
-
+        else if (VoiceMsg.indexOf("제육볶음") > -1) {
+            FuncVoiceOut("더 추가하실 메뉴가 있다면 네 없다며 다음이라고 말씀해 주세요.");
+            textView.setText("더 추가하실 메뉴가 있다면 네 없다며 다음이라고 말씀해 주세요.\n");
+            mRecognizer=SpeechRecognizer.createSpeechRecognizer(this);
+            mRecognizer.setRecognitionListener(listener);
+            mRecognizer.startListening(SttIntent);
+        }
+        else if (VoiceMsg.indexOf("공기밥") > -1) {
+            FuncVoiceOut("더 추가하실 메뉴가 있다면 네 없다며 다음이라고 말씀해 주세요.");
+            textView.setText("더 추가하실 메뉴가 있다면 네 없다며 다음이라고 말씀해 주세요.\n");
+            mRecognizer=SpeechRecognizer.createSpeechRecognizer(this);
+            mRecognizer.setRecognitionListener(listener);
+            mRecognizer.startListening(SttIntent);
+        }
+        else if (VoiceMsg.indexOf("네") > -1) {
+            FuncVoiceOut("추가하실 메뉴를 말씀해 주세요.");
+            textView.setText("추가하실 메뉴를 말씀해 주세요.\n");
+            mRecognizer=SpeechRecognizer.createSpeechRecognizer(this);
+            mRecognizer.setRecognitionListener(listener);
+            mRecognizer.startListening(SttIntent);
+        }
+        else if (VoiceMsg.indexOf("다음") > -1) {
+            FuncVoiceOut("장바구니로 넘어갑니다.");
+            textView.setText("장바구니로 넘어갑니다.\n");
+            Intent intent = new Intent(getApplicationContext(), KoreanActivity.class);
+            startActivity(intent);
+        }
         else if (VoiceMsg.indexOf("한식") > -1 ) {
-            FuncVoiceOut("한식으로 넘어갑니다.");
+            FuncVoiceOut("한식 카테고리로 넘어갑니다.");
             textView.setText("한식으로 넘어갑니다.\n");
             Intent intent = new Intent(getApplicationContext(), KoreanActivity.class);
             startActivity(intent);
         }
 
         else if (VoiceMsg.indexOf("분식") > -1) {
-            FuncVoiceOut("분식으로 넘어갑니다.");
+            FuncVoiceOut("분식 카테고리로 넘어갑니다.");
             textView.setText("분식으로 넘어갑니다.\n");
             Intent intent = new Intent(getApplicationContext(), TtoActivity.class);
             startActivity(intent);
         }
 
         else if (VoiceMsg.indexOf("치킨") > -1) {
-            FuncVoiceOut("치킨으로 넘어갑니다.");
+            FuncVoiceOut("치킨 카테고리로 넘어갑니다.");
             textView.setText("치킨으로 넘어갑니다.\n");
             Intent intent = new Intent(getApplicationContext(), ChickenActivity.class);
             startActivity(intent);
         }
 
         else if (VoiceMsg.indexOf("디저트") > -1) {
-            FuncVoiceOut("디저트로 넘어갑니다.");
+            FuncVoiceOut("디저트 카테고리로 넘어갑니다.");
             textView.setText("디저트로 넘어갑니다.\n");
             Intent intent = new Intent(getApplicationContext(), DessertActivity.class);
             startActivity(intent);

@@ -68,7 +68,7 @@ public class SttActivity extends AppCompatActivity implements TextToSpeech.OnIni
                 @Override
                 public void onClick(View v) {
                     System.out.println("음성인식 시작");
-                    FuncVoiceOut("주문하시겠습니까?");
+                    FuncVoiceOut("주문하시려면 네 주문내역을 보시려면 주문내역이라고 말씀해 주세요");
                     if (ContextCompat.checkSelfPermission(cThis, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(SttActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
 
@@ -185,9 +185,9 @@ public class SttActivity extends AppCompatActivity implements TextToSpeech.OnIni
         VoiceMsg = VoiceMsg.replace(" ", "");
 
 
-        if (VoiceMsg.indexOf("네") > -1 || VoiceMsg.indexOf("어") > -1) {
-            FuncVoiceOut("메뉴 혹은 가게이름을 말씀해주세요.");
-            textView.setText("메뉴 혹은 가게이름을 말씀해주세요.\n");
+        if (VoiceMsg.indexOf("네") > -1) {
+            FuncVoiceOut("한식 분식 치킨 디저트 중에 드시고 싶은 종류를 말씀해주세요.");
+            textView.setText("한식 분식 치킨 디저트 중에 드시고 싶은 종류를 말씀해주세요.\n");
             mRecognizer=SpeechRecognizer.createSpeechRecognizer(this);
             mRecognizer.setRecognitionListener(listener);
             mRecognizer.startListening(SttIntent);
@@ -241,7 +241,7 @@ public class SttActivity extends AppCompatActivity implements TextToSpeech.OnIni
 
 }
 
-
+/*
     public void moveActivity(String textView) {
         if (textView.indexOf("주문내역") > -1) {
             String guideStr = "주문내역으로 넘어갑니다.";
@@ -256,8 +256,16 @@ public class SttActivity extends AppCompatActivity implements TextToSpeech.OnIni
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
         }
+        else {
+            String guideStr = "죄송합니다. 다시 말씀해주시겠어요?";
+            Toast.makeText(getApplicationContext(), guideStr, Toast.LENGTH_SHORT).show();
+            FuncVoiceOut(guideStr);
+
+        }
+
     }
 
+*/
 
     private void FuncVoiceOut(String OutMsg) {
         if (OutMsg.length() < 1) return;
