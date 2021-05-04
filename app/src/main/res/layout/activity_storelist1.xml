@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".KoreanActivity">
 
@@ -20,7 +21,7 @@
 
             <TextView
                 android:id="@+id/store"
-                android:layout_width="431dp"
+                android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="가게이름"
@@ -37,7 +38,7 @@
 
         <LinearLayout
             android:layout_width="378dp"
-            android:layout_height="589dp"
+            android:layout_height="67dp"
             android:layout_gravity="center"
             android:background="#FFFFFF"
             android:orientation="vertical">
@@ -63,8 +64,8 @@
                             android:layout_width="90dp"
                             android:layout_height="match_parent"
                             android:text="한식"
-                            android:textStyle="bold"
-                            android:textSize="23dp"/>
+                            android:textSize="23dp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -93,8 +94,8 @@
                             android:layout_width="90dp"
                             android:layout_height="80dp"
                             android:text="분식"
-                            android:textStyle="bold"
-                            android:textSize="23dp"/>
+                            android:textSize="23dp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <Button
@@ -102,22 +103,30 @@
                         android:layout_width="100dp"
                         android:layout_height="80dp"
                         android:text="디저트"
-                        android:textStyle="bold"
-                        android:textSize="20dp"/>
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
-
             </LinearLayout>
+        </LinearLayout>
 
-            <LinearLayout
+        //framelayout은 버튼 누를시 화면전환 (linear에서 relative, 해당 fragment로전환)
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="530dp"
+                android:layout_height="match_parent">
 
-                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="378dp"
+                    android:layout_height="520dp"
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    android:id="@+id/menu"
+                    android:background="#FFFFFF">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
+                    android:background="#FFFFFF"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -294,10 +303,16 @@
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
+                </LinearLayout>
 
-            </LinearLayout>
+                <RelativeLayout
+                    android:id="@+id/fragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></RelativeLayout>
 
-        </LinearLayout>
+            </FrameLayout>
+
+
 
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
