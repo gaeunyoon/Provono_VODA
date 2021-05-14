@@ -11,50 +11,46 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="90dp"
-        android:background="@color/colorPrimary"
+        android:layout_height="170dp"
+        android:background="@color/black"
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="84dp"
-            android:layout_height="90dp"
-            android:background="@color/colorPrimary" />
+            android:layout_width="88dp"
+            android:layout_height="150dp"
+            android:background="@color/black" />
 
         <ImageView
-            android:layout_width="229dp"
+            android:id="@+id/voda"
+            android:layout_width="233dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center|right"
-            android:background="@color/colorPrimary"
-            android:src="@drawable/a" />
+            android:background="@color/black"
+            android:src="@drawable/voda3" />
 
 
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="250dp"
-        android:layout_marginTop="90dp"
-        android:src="@drawable/voda3" />
-
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:id="@+id/sttResult"
+        android:layout_width="350dp"
         android:layout_height="500dp"
-        android:layout_marginTop="270dp"
-        android:background="@color/black"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="160dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
         android:orientation="vertical">
 
 
-        <ImageButton
-            android:id="@+id/OrderButton"
-            android:layout_width="389dp"
-            android:layout_height="354dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="40dp"
-            android:background="@color/black"
-            app:srcCompat="@drawable/od" />
-
-
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="400dp"
+            android:layout_gravity="bottom"
+            app:tint="@color/black"
+            app:srcCompat="@android:drawable/ic_lock_silent_mode_off" />
     </LinearLayout>
 
 </RelativeLayout>
