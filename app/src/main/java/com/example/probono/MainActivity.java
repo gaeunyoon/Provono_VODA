@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                 tts.setLanguage(Locale.KOREAN);
             }
 
-            //Button Click Event 설정
 
             textView = (TextView) findViewById(R.id.sttResult);
 
