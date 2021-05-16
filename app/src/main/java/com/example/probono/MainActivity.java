@@ -78,8 +78,8 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                 @Override
                 public void run() {
                   
-                    FuncVoiceOut("안녕하세요. 주문을 하시려면 주문 , 주문내역을 확인하시려면 주문내역이라고 말씀해주세요.");
-                    textView.setText("안녕하세요. 주문을 하시려면 주문 , 주문내역을 보시려면 주문내역이라고 말씀해주세요.\n");
+                    FuncVoiceOut("안녕하세요. 주문을 하시려면 주문 , 주문내역을 확인하시려면 확인이라고 말씀해주세요.");
+                    textView.setText("안녕하세요. 주문을 하시려면 주문 , 주문내역을 보시려면 확인이라고 말씀해주세요.\n");
                     if (ContextCompat.checkSelfPermission(cThis, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
 
@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             startActivity(intent);
         }
 
-        else if (VoiceMsg.indexOf("주문내역") > -1) {
+        else if (VoiceMsg.indexOf("확인") > -1) {
             FuncVoiceOut("주문내역으로 넘어갑니다.");
             textView.setText("주문내역으로 넘어갑니다.\n");
             Intent intent = new Intent(getApplicationContext(), OrderlistActivity.class);
