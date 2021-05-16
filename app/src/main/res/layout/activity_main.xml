@@ -31,26 +31,34 @@
 
     </LinearLayout>
 
-
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_marginTop="160dp"
+        android:orientation="vertical">
+    <TextView
         android:id="@+id/sttResult"
         android:layout_width="350dp"
         android:layout_height="500dp"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="160dp"
+        android:textColor="#050505"
+        android:textSize="20sp"
+        android:textStyle="bold"
         android:background="@color/colorPrimary"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"/>
+    </LinearLayout>
 
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/sttBtn"
             android:layout_width="100dp"
             android:layout_height="70dp"
-            android:layout_marginTop="400dp"
+            android:layout_marginTop="550dp"
+            android:layout_marginLeft="30dp"
             android:layout_gravity="bottom"
             app:tint="@color/black"
             app:srcCompat="@android:drawable/ic_lock_silent_mode_off" />
-    </LinearLayout>
+
 
 </RelativeLayout>

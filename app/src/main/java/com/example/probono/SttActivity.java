@@ -87,7 +87,6 @@ public class SttActivity extends AppCompatActivity implements TextToSpeech.OnIni
         }
 
 
-
     private RecognitionListener listener = new RecognitionListener() {
         @Override
         public void onReadyForSpeech(Bundle params) {

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     TextToSpeech tts;
 
     //화면처리용
-    Button sttBtn;
+
     TextView textView;
 
     @Override
@@ -64,25 +65,40 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                 tts.setLanguage(Locale.KOREAN);
             }
 
+            //Button Click Event 설정
 
+            ImageView imageButton=(ImageView) findViewById(R.id.sttBtn);
             textView = (TextView) findViewById(R.id.sttResult);
 
-            System.out.println("음성인식 시작");
-            FuncVoiceOut("안녕하세요 보다입니다. 주문을 하시려면 주문 , 주문내역을 보시려면 주문내역이라고 말씀해주세요.");
-            textView.setText("안녕하세요 보다입니다. 주문을 하시려면 주문 , 주문내역을 보시려면 주문내역이라고 말씀해주세요.\n");
-            if (ContextCompat.checkSelfPermission(cThis, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
 
-            } else {
-                try {
-                    mRecognizer.startListening(SttIntent);
-                } catch (SecurityException e) {
-                    e.printStackTrace();
+
+
+
+          new android.os.Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                  
+                    FuncVoiceOut("안녕하세요. 주문을 하시려면 주문 , 주문내역을 확인하시려면 주문내역이라고 말씀해주세요.");
+                    textView.setText("안녕하세요. 주문을 하시려면 주문 , 주문내역을 보시려면 주문내역이라고 말씀해주세요.\n");
+                    if (ContextCompat.checkSelfPermission(cThis, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
+
+                    } else {
+                        try {
+                            mRecognizer.startListening(SttIntent);
+                        } catch (SecurityException e) {
+                            e.printStackTrace();
+                        }
+
                 }
             }
 
+
+        },1000);
+
         }));
     }
+
 
 
     private RecognitionListener listener = new RecognitionListener() {
@@ -290,9 +306,6 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             int result = tts.setLanguage(Locale.KOREA);
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Log.e("TTS", "This Language is not supported");
-            } else {
-                sttBtn.setEnabled(true);
-
             }
         } else {
             Log.e("TTS", "Initilization Failed!");
