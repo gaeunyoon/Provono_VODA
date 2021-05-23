@@ -4,22 +4,18 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
-import android.telephony.VisualVoicemailService;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -28,8 +24,12 @@ import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import javax.xml.transform.Result;
 
-public class MainActivity extends AppCompatActivity implements TextToSpeech.OnInitListener{
+public class ReviewActivity extends AppCompatActivity implements TextToSpeech.OnInitListener{
+
+    TextView outputView;
+    RatingBar ratingBar;
 
     final int PERMISSION = 1;
     Context cThis;
@@ -43,16 +43,31 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     TextToSpeech tts;
 
     //화면처리용
-
     TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         cThis = this;
+        setContentView(R.layout.activity_review);
 
-        setContentView(R.layout.activity_main);
+        //review
+        ratingBar =(RatingBar)findViewById(R.id.ratingBar);
+        outputView =(TextView) findViewById(R.id.output);
 
+        Button rebtn=(Button)findViewById(R.id.rebtn);
+        rebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                returnToMain();
+            }
+        });
+        Intent intent = getIntent();
+        processIntent(intent);
+
+
+
+                //stt
         SttIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         SttIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
         SttIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");
@@ -65,16 +80,17 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                 tts.setLanguage(Locale.KOREAN);
             }
 
-            textView = (TextView) findViewById(R.id.sttResult);
+            textView = (TextView) findViewById(R.id.review);
 
-          new android.os.Handler().postDelayed(new Runnable() {
+
+
+            new android.os.Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                  
-                    FuncVoiceOut("안녕하세요. 주문을 하시려면 주문 , 주문내역을 확인하시려면 확인이라고 말씀해주세요.");
-                    textView.setText("안녕하세요. 주문을 하시려면 주문 , 주문내역을 보시려면 확인이라고 말씀해주세요.\n");
+
+                    FuncVoiceOut("별점 1점부터 5점 중에 말씀해주세요.");
                     if (ContextCompat.checkSelfPermission(cThis, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
+                        ActivityCompat.requestPermissions(ReviewActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
 
                     } else {
                         try {
@@ -83,16 +99,33 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                             e.printStackTrace();
                         }
 
+                    }
                 }
-            }
 
 
-        },1000);
+            },1000);
 
         }));
     }
 
+ //review
+    private void processIntent(Intent intent){
+        if(intent != null){
+            float rating = intent.getFloatExtra("rating",0.0f);
+            ratingBar.setRating(rating);
+        }
+    }
 
+    public void returnToMain(){
+        String contents=outputView.getText().toString();
+        float ratingbarupdate = ratingBar.getRating();
+        Intent intent = new Intent();
+        intent.putExtra("contents",contents);
+        intent.putExtra("ratingbarupdate",ratingbarupdate);
+
+        setResult(RESULT_OK,intent);
+        finish();
+    }
 
     private RecognitionListener listener = new RecognitionListener() {
         @Override
