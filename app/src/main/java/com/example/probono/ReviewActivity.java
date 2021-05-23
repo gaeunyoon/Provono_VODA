@@ -224,7 +224,7 @@ public class ReviewActivity extends AppCompatActivity implements TextToSpeech.On
         VoiceMsg = VoiceMsg.replace(" ", "");
 
 
-        if (VoiceMsg.indexOf("주문") > -1) {
+        if (VoiceMsg.indexOf("1점") > -1) {
             FuncVoiceOut("한식 분식 치킨 디저트 중에 드시고 싶은 종류를 말씀해주세요.");
             textView.setText("한식 분식 치킨 디저트 중에 드시고 싶은 종류를 말씀해주세요.\n");
             mRecognizer=SpeechRecognizer.createSpeechRecognizer(this);

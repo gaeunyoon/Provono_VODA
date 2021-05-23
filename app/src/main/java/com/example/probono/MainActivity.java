@@ -233,7 +233,15 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             Intent intent = new Intent(getApplicationContext(), OrderlistActivity.class);
             startActivity(intent);
 
-        }else{
+        }
+        else if (VoiceMsg.indexOf("리뷰") > -1) {
+            FuncVoiceOut("리뷰 작성으로 넘어갑니다.");
+            textView.setText("리뷰 작성으로 넘어갑니다.\n");
+            Intent intent = new Intent(getApplicationContext(), RelistActivity.class);
+            startActivity(intent);
+        }
+
+        else{
             FuncVoiceOut("죄송합니다. 다시 말씀해주시겠어요?");
             textView.setText("죄송합니다. 다시 말씀해주시겠어요?\n");
             mRecognizer=SpeechRecognizer.createSpeechRecognizer(this);
