@@ -18,6 +18,8 @@
         <activity android:name=".KoreanActivity"></activity>
         <activity android:name=".OrderlistActivity"/>
         <activity android:name=".PayActivity"/>
+        <activity android:name=".RelistActivity"/>
+        <activity android:name=".ReviewActivity"/>
         <activity android:name=".ChickenActivity"/>
         <activity android:name=".TtoActivity"/>
         <activity android:name=".DessertActivity"/>
