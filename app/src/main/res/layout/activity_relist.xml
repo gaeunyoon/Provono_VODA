@@ -46,19 +46,24 @@
             android:textStyle="bold"
             android:text="가게"/>
 
-        <RatingBar
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
-            android:id="@+id/ratingBar"
-            android:layout_marginTop="20dp"
-            android:numStars="5"
-            android:rating="5"
-            android:stepSize="1"
-            style="?android:attr/ratingBarStyleSmall"/>
+            android:id="@+id/number"
+            android:layout_gravity="center"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:text="점"/>
 
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="350dp"
         android:layout_height="100dp"
@@ -66,6 +71,7 @@
         android:layout_marginLeft="30dp"
         android:background="@color/white"
         android:orientation="horizontal">
+
 
         <TextView
             android:layout_width="wrap_content"

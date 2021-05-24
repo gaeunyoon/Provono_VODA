@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -28,8 +29,10 @@ import javax.xml.transform.Result;
 
 public class ReviewActivity extends AppCompatActivity implements TextToSpeech.OnInitListener{
 
-    TextView outputView;
-    RatingBar ratingBar;
+    TextView number;
+    TextView review;
+    TextView stt;
+
 
     final int PERMISSION = 1;
     Context cThis;
@@ -42,8 +45,6 @@ public class ReviewActivity extends AppCompatActivity implements TextToSpeech.On
     //음성출력용
     TextToSpeech tts;
 
-    //화면처리용
-    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +52,15 @@ public class ReviewActivity extends AppCompatActivity implements TextToSpeech.On
         cThis = this;
         setContentView(R.layout.activity_review);
 
-        //review
-        ratingBar =(RatingBar)findViewById(R.id.ratingBar);
-        outputView =(TextView) findViewById(R.id.output);
 
-        Button rebtn=(Button)findViewById(R.id.rebtn);
-        rebtn.setOnClickListener(new View.OnClickListener() {
+        //review
+
+        number =(TextView) findViewById(R.id.number);
+        review = (TextView) findViewById(R.id.review);
+        stt = (TextView) findViewById(R.id.stt);
+ /*
+        save=(Button)findViewById(R.id.save);
+        save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 returnToMain();
@@ -65,7 +69,7 @@ public class ReviewActivity extends AppCompatActivity implements TextToSpeech.On
         Intent intent = getIntent();
         processIntent(intent);
 
-
+         */
 
                 //stt
         SttIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -80,15 +84,15 @@ public class ReviewActivity extends AppCompatActivity implements TextToSpeech.On
                 tts.setLanguage(Locale.KOREAN);
             }
 
-            textView = (TextView) findViewById(R.id.review);
 
 
 
-            new android.os.Handler().postDelayed(new Runnable() {
+            new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
 
-                    FuncVoiceOut("별점 1점부터 5점 중에 말씀해주세요.");
+                    FuncVoiceOut("해당 가게의 별점 1점부터 5점 중에 말씀해주세요.");
+                    stt.setText("해당 가게의 별점 1점부터 5점 중에 말씀해주세요.\n");
                     if (ContextCompat.checkSelfPermission(cThis, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(ReviewActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
 
@@ -107,18 +111,18 @@ public class ReviewActivity extends AppCompatActivity implements TextToSpeech.On
 
         }));
     }
-
+/*
  //review
     private void processIntent(Intent intent){
         if(intent != null){
             float rating = intent.getFloatExtra("rating",0.0f);
-            ratingBar.setRating(rating);
+            number.setText((int) rating);
         }
     }
 
     public void returnToMain(){
-        String contents=outputView.getText().toString();
-        float ratingbarupdate = ratingBar.getRating();
+        String contents=number.getText().toString();
+        CharSequence ratingbarupdate = number.getText();
         Intent intent = new Intent();
         intent.putExtra("contents",contents);
         intent.putExtra("ratingbarupdate",ratingbarupdate);
@@ -126,6 +130,7 @@ public class ReviewActivity extends AppCompatActivity implements TextToSpeech.On
         setResult(RESULT_OK,intent);
         finish();
     }
+*/
 
     private RecognitionListener listener = new RecognitionListener() {
         @Override
@@ -201,7 +206,7 @@ public class ReviewActivity extends AppCompatActivity implements TextToSpeech.On
             mResult.toArray(rs);
 
             Log.i(LogTT, "입력값 : " + rs[0]);
-            textView.setText(rs[0] + "\r\n" + textView.getText());
+            review.setText(rs[0] + "\r\n" + review.getText());
             FuncVoiceOrderCheck(rs[0]);
 
         }
@@ -225,50 +230,66 @@ public class ReviewActivity extends AppCompatActivity implements TextToSpeech.On
 
 
         if (VoiceMsg.indexOf("1점") > -1) {
-            FuncVoiceOut("한식 분식 치킨 디저트 중에 드시고 싶은 종류를 말씀해주세요.");
-            textView.setText("한식 분식 치킨 디저트 중에 드시고 싶은 종류를 말씀해주세요.\n");
+            number.setText("1\n");
+            FuncVoiceOut("한 줄 리뷰를 말씀해주세요.");
+            stt.setText("한 줄 리뷰를 말씀해주세요.\n");
+            //final CharSequence numstars=number.getText();
             mRecognizer=SpeechRecognizer.createSpeechRecognizer(this);
             mRecognizer.setRecognitionListener(listener);
             mRecognizer.startListening(SttIntent);
         }
 
-        else if (VoiceMsg.indexOf("한식") > -1 ) {
-            FuncVoiceOut("한식으로 넘어갑니다.");
-            textView.setText("한식으로 넘어갑니다.\n");
-            Intent intent = new Intent(getApplicationContext(), KoreanActivity.class);
-            startActivity(intent);
+        else if (VoiceMsg.indexOf("2점") > -1) {
+            number.setText("2\n");
+            FuncVoiceOut("한 줄 리뷰를 말씀해주세요.");
+            stt.setText("한 줄 리뷰를 말씀해주세요.\n");
+           // final CharSequence numstars=number.getText();
+            mRecognizer=SpeechRecognizer.createSpeechRecognizer(this);
+            mRecognizer.setRecognitionListener(listener);
+            mRecognizer.startListening(SttIntent);
         }
 
-        else if (VoiceMsg.indexOf("분식") > -1) {
-            FuncVoiceOut("분식으로 넘어갑니다.");
-            textView.setText("분식으로 넘어갑니다.\n");
-            Intent intent = new Intent(getApplicationContext(), TtoActivity.class);
-            startActivity(intent);
+        else if (VoiceMsg.indexOf("3점") > -1) {
+            number.setText("3\n");
+            FuncVoiceOut("한 줄 리뷰를 말씀해주세요.");
+            stt.setText("한 줄 리뷰를 말씀해주세요.\n");
+            //final CharSequence numstars=number.getText();
+            mRecognizer=SpeechRecognizer.createSpeechRecognizer(this);
+            mRecognizer.setRecognitionListener(listener);
+            mRecognizer.startListening(SttIntent);
         }
 
-        else if (VoiceMsg.indexOf("치킨") > -1) {
-            FuncVoiceOut("치킨으로 넘어갑니다.");
-            textView.setText("치킨으로 넘어갑니다.\n");
-            Intent intent = new Intent(getApplicationContext(), ChickenActivity.class);
-            startActivity(intent);
+        else if (VoiceMsg.indexOf("4점") > -1) {
+            number.setText("4\n");
+            FuncVoiceOut("한 줄 리뷰를 말씀해주세요.");
+            stt.setText("한 줄 리뷰를 말씀해주세요.\n");
+           // final CharSequence numstars=number.getText();
+            mRecognizer=SpeechRecognizer.createSpeechRecognizer(this);
+            mRecognizer.setRecognitionListener(listener);
+            mRecognizer.startListening(SttIntent);
         }
 
-        else if (VoiceMsg.indexOf("디저트") > -1) {
-            FuncVoiceOut("디저트로 넘어갑니다.");
-            textView.setText("디저트로 넘어갑니다.\n");
-            Intent intent = new Intent(getApplicationContext(), DessertActivity.class);
-            startActivity(intent);
+        else if (VoiceMsg.indexOf("5점") > -1) {
+            number.setText("5\n");
+            FuncVoiceOut("한 줄 리뷰를 말씀해주세요.");
+            stt.setText("한 줄 리뷰를 말씀해주세요.\n");
+           // final CharSequence numstars=number.getText();
+            mRecognizer=SpeechRecognizer.createSpeechRecognizer(this);
+            mRecognizer.setRecognitionListener(listener);
+            mRecognizer.startListening(SttIntent);
         }
 
-        else if (VoiceMsg.indexOf("확인") > -1) {
-            FuncVoiceOut("주문내역으로 넘어갑니다.");
-            textView.setText("주문내역으로 넘어갑니다.\n");
-            Intent intent = new Intent(getApplicationContext(), OrderlistActivity.class);
+        else if (VoiceMsg.indexOf("저장") > -1) {
+            FuncVoiceOut("리뷰 내용을 저장합니다.");
+            //returnToMain();
+            Intent intent = new Intent(getApplicationContext(), RelistActivity.class);
             startActivity(intent);
 
-        }else{
-            FuncVoiceOut("죄송합니다. 다시 말씀해주시겠어요?");
-            textView.setText("죄송합니다. 다시 말씀해주시겠어요?\n");
+        }else if (VoiceMsg.indexOf("요") > -1) {
+
+            review.setText( review.getText());
+            FuncVoiceOut("리뷰를 저장하시겠으면 저장이라고 말씀해주세요.");
+            stt.setText("리뷰를 저장하시겠으면 저장이라고 말씀해주세요.\n");
             mRecognizer=SpeechRecognizer.createSpeechRecognizer(this);
             mRecognizer.setRecognitionListener(listener);
             mRecognizer.startListening(SttIntent);

@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         else if (VoiceMsg.indexOf("리뷰") > -1) {
             FuncVoiceOut("리뷰 작성으로 넘어갑니다.");
             textView.setText("리뷰 작성으로 넘어갑니다.\n");
-            Intent intent = new Intent(getApplicationContext(), RelistActivity.class);
+            Intent intent = new Intent(getApplicationContext(), ReviewActivity.class);
             startActivity(intent);
         }
 

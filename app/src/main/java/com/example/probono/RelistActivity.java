@@ -13,33 +13,34 @@ import androidx.appcompat.app.AppCompatActivity;
 public class RelistActivity extends AppCompatActivity {
 
     TextView outputView;
-    RatingBar ratingBar;
+    TextView number;
+    Button rebtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_relist);
-
-        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         outputView =(TextView) findViewById(R.id.output);
+        number =(TextView) findViewById(R.id.number);
 
-        Button rebtn=(Button)findViewById(R.id.rebtn);
+        rebtn=(Button)findViewById(R.id.rebtn);
         rebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showCommentWriteActivity();
+                CharSequence rating=number.getText();
+
+                Intent intent = new Intent(RelistActivity.this, ReviewActivity.class);
+                RelistActivity.this.startActivity(intent);
+
+                intent.putExtra("rating",rating);
+                startActivityForResult(intent,101);
+
             }
         });
 
     }
-    public void showCommentWriteActivity(){
-        float rating=ratingBar.getRating();
 
-        Intent intent = new Intent(getApplicationContext(),ReviewActivity.class);
-        intent.putExtra("rating",rating);
-        startActivityForResult(intent,101);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent){
@@ -50,7 +51,7 @@ public class RelistActivity extends AppCompatActivity {
                 String contents=intent.getStringExtra("contents");
                 float ratingBarupdate = intent.getFloatExtra("ratingbarupdate",0.0f);
                 outputView.setText(contents);
-                ratingBar.setRating(ratingBarupdate);
+                number.setText((int) ratingBarupdate);
             }
         }
     }
