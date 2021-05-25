@@ -30,7 +30,8 @@ import javax.xml.transform.Result;
 public class ReviewActivity extends AppCompatActivity implements TextToSpeech.OnInitListener{
 
     TextView number;
-    TextView review;
+    TextView review1;
+    TextView review2;
     TextView stt;
 
 
@@ -56,7 +57,8 @@ public class ReviewActivity extends AppCompatActivity implements TextToSpeech.On
         //review
 
         number =(TextView) findViewById(R.id.number);
-        review = (TextView) findViewById(R.id.review);
+        review1 = (TextView) findViewById(R.id.review1);
+        review2 = (TextView) findViewById(R.id.review2);
         stt = (TextView) findViewById(R.id.stt);
  /*
         save=(Button)findViewById(R.id.save);
@@ -206,7 +208,8 @@ public class ReviewActivity extends AppCompatActivity implements TextToSpeech.On
             mResult.toArray(rs);
 
             Log.i(LogTT, "입력값 : " + rs[0]);
-            review.setText(rs[0] + "\r\n" + review.getText());
+            review1.setText(rs[0] + "\r\n" + review1.getText());
+            review2.setText(rs[0] + "\r\n" + review2.getText());
             FuncVoiceOrderCheck(rs[0]);
 
         }
@@ -231,8 +234,8 @@ public class ReviewActivity extends AppCompatActivity implements TextToSpeech.On
 
         if (VoiceMsg.indexOf("1점") > -1) {
             number.setText("1\n");
-            FuncVoiceOut("한 줄 리뷰를 말씀해주세요.");
-            stt.setText("한 줄 리뷰를 말씀해주세요.\n");
+            FuncVoiceOut("해당 가게 음식이 맛있었다면 네 아니라면 아니요 라고 말씀해주세요.");
+            stt.setText("해당 가게 음식이 맛있었다면 네 아니라면 아니요 라고 말씀해주세요.\n");
             //final CharSequence numstars=number.getText();
             mRecognizer=SpeechRecognizer.createSpeechRecognizer(this);
             mRecognizer.setRecognitionListener(listener);
@@ -241,8 +244,8 @@ public class ReviewActivity extends AppCompatActivity implements TextToSpeech.On
 
         else if (VoiceMsg.indexOf("2점") > -1) {
             number.setText("2\n");
-            FuncVoiceOut("한 줄 리뷰를 말씀해주세요.");
-            stt.setText("한 줄 리뷰를 말씀해주세요.\n");
+            FuncVoiceOut("해당 가게 음식이 맛있었다면 네 아니라면 아니요 라고 말씀해주세요.");
+            stt.setText("해당 가게 음식이 맛있었다면 네 아니라면 아니요 라고 말씀해주세요.\n");
            // final CharSequence numstars=number.getText();
             mRecognizer=SpeechRecognizer.createSpeechRecognizer(this);
             mRecognizer.setRecognitionListener(listener);
@@ -251,8 +254,8 @@ public class ReviewActivity extends AppCompatActivity implements TextToSpeech.On
 
         else if (VoiceMsg.indexOf("3점") > -1) {
             number.setText("3\n");
-            FuncVoiceOut("한 줄 리뷰를 말씀해주세요.");
-            stt.setText("한 줄 리뷰를 말씀해주세요.\n");
+            FuncVoiceOut("해당 가게 음식이 맛있었다면 네 아니라면 아니요 라고 말씀해주세요.");
+            stt.setText("해당 가게 음식이 맛있었다면 네 아니라면 아니요 라고 말씀해주세요.\n");
             //final CharSequence numstars=number.getText();
             mRecognizer=SpeechRecognizer.createSpeechRecognizer(this);
             mRecognizer.setRecognitionListener(listener);
@@ -261,8 +264,8 @@ public class ReviewActivity extends AppCompatActivity implements TextToSpeech.On
 
         else if (VoiceMsg.indexOf("4점") > -1) {
             number.setText("4\n");
-            FuncVoiceOut("한 줄 리뷰를 말씀해주세요.");
-            stt.setText("한 줄 리뷰를 말씀해주세요.\n");
+            FuncVoiceOut("해당 가게 음식이 맛있었다면 네 아니라면 아니요 라고 말씀해주세요.");
+            stt.setText("해당 가게 음식이 맛있었다면 네 아니라면 아니요 라고 말씀해주세요.\n");
            // final CharSequence numstars=number.getText();
             mRecognizer=SpeechRecognizer.createSpeechRecognizer(this);
             mRecognizer.setRecognitionListener(listener);
@@ -271,8 +274,8 @@ public class ReviewActivity extends AppCompatActivity implements TextToSpeech.On
 
         else if (VoiceMsg.indexOf("5점") > -1) {
             number.setText("5\n");
-            FuncVoiceOut("한 줄 리뷰를 말씀해주세요.");
-            stt.setText("한 줄 리뷰를 말씀해주세요.\n");
+            FuncVoiceOut("해당 가게 음식이 맛있었다면 네 아니라면 아니요 라고 말씀해주세요.");
+            stt.setText("해당 가게 음식이 맛있었다면 네 아니라면 아니요 라고 말씀해주세요.\n");
            // final CharSequence numstars=number.getText();
             mRecognizer=SpeechRecognizer.createSpeechRecognizer(this);
             mRecognizer.setRecognitionListener(listener);
@@ -281,20 +284,55 @@ public class ReviewActivity extends AppCompatActivity implements TextToSpeech.On
 
         else if (VoiceMsg.indexOf("저장") > -1) {
             FuncVoiceOut("리뷰 내용을 저장합니다.");
+            stt.setText("리뷰 내용을 저장합니다.\n");
             //returnToMain();
             Intent intent = new Intent(getApplicationContext(), RelistActivity.class);
             startActivity(intent);
+        }
+        else if (VoiceMsg.indexOf("네") > -1) {
+            review1.setText("맛있어요.\n");
+            FuncVoiceOut("해당 가게에 만족하셨다면 만족 아니라면 불만족이라고 말씀해주세요.");
+            stt.setText("해당 가게에 만족하셨다면 만족 아니라면 불만족이라고 말씀해주세요.\n");
+            //returnToMain();
+            mRecognizer=SpeechRecognizer.createSpeechRecognizer(this);
+            mRecognizer.setRecognitionListener(listener);
+            mRecognizer.startListening(SttIntent);
 
-        }else if (VoiceMsg.indexOf("요") > -1) {
-
-            review.setText( review.getText());
-            FuncVoiceOut("리뷰를 저장하시겠으면 저장이라고 말씀해주세요.");
-            stt.setText("리뷰를 저장하시겠으면 저장이라고 말씀해주세요.\n");
+        }
+        else if (VoiceMsg.indexOf("아니요") > -1) {
+            review1.setText("맛없어요.\n");
+            FuncVoiceOut("해당 가게에 만족하셨다면 만족 아니라면 불만족이라고 말씀해주세요.");
+            stt.setText("해당 가게에 만족하셨다면 만족 아니라면 불만족이라고 말씀해주세요.\n");
+            //returnToMain();
             mRecognizer=SpeechRecognizer.createSpeechRecognizer(this);
             mRecognizer.setRecognitionListener(listener);
             mRecognizer.startListening(SttIntent);
         }
-
+        else if (VoiceMsg.indexOf("만족") > -1) {
+            review2.setText("만족해요.\n");
+            FuncVoiceOut("리뷰를 저장하시겠으면 저장이라고 말씀해주세요.");
+            stt.setText("리뷰를 저장하시겠으면 저장이라고 말씀해주세요.\n");
+            //returnToMain();
+            mRecognizer=SpeechRecognizer.createSpeechRecognizer(this);
+            mRecognizer.setRecognitionListener(listener);
+            mRecognizer.startListening(SttIntent);
+        }
+        else if (VoiceMsg.indexOf("불만족") > -1) {
+            review2.setText("불만족해요.\n");
+            FuncVoiceOut("리뷰를 저장하시겠으면 저장이라고 말씀해주세요.");
+            stt.setText("리뷰를 저장하시겠으면 저장이라고 말씀해주세요.\n");
+            //returnToMain();
+            mRecognizer=SpeechRecognizer.createSpeechRecognizer(this);
+            mRecognizer.setRecognitionListener(listener);
+            mRecognizer.startListening(SttIntent);
+        }
+        else {
+           FuncVoiceOut("죄송합니다. 다시 말씀해주시겠어요?");
+           stt.setText("죄송합니다. 다시 말씀해주시겠어요?\n");
+           mRecognizer=SpeechRecognizer.createSpeechRecognizer(this);
+           mRecognizer.setRecognitionListener(listener);
+           mRecognizer.startListening(SttIntent);
+        }
     }
 
 

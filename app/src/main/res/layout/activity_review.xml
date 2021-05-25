@@ -110,23 +110,22 @@
         android:background="@color/white">
     </TextView>
         <TextView
-            android:id="@+id/review"
-            android:layout_width="260dp"
+            android:id="@+id/review1"
+            android:layout_width="120dp"
             android:layout_height="70dp"
             android:textSize="20sp"
             android:textStyle="bold"
             android:background="@color/white">
         </TextView>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="저장"
-        android:layout_marginTop="100dp"
-        android:layout_marginLeft="130dp"
-        android:layout_gravity="center"
-        android:id="@+id/save">
-    </Button>
+        <TextView
+            android:id="@+id/review2"
+            android:layout_width="120dp"
+            android:layout_height="70dp"
+            android:background="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"></TextView>
+
 
     </LinearLayout>
 
